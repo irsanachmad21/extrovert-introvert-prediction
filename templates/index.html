@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prediksi Kepribadian</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: url("{{ url_for('static', filename='dataset-cover.png') }}") no-repeat center center fixed;
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+      .wrapper {
+        display: flex;
+        gap: 60px;
+        align-items: flex-start;
+      }
+
+      .container {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 30px 40px;
+        border-radius: 15px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        width: 400px;
+        text-align: center;
+      }
+
+      h2 {
+        color: #404040;
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        text-align: left;
+        margin-top: 10px;
+        color: #333;
+      }
+
+      input, select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 20px;
+        background-color: #3572ef;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      button:hover {
+        background-color: #2859b5;
+      }
+
+      .result-box {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 30px 40px;
+        border-radius: 15px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        width: 350px;
+        text-align: left;
+      }
+
+      .result-box h3 {
+        color: #404040;
+        margin-bottom: 15px;
+      }
+
+      .result-box p, .result-box li {
+        margin: 5px 0;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Form -->
+      <div class="container">
+        <form action="/predict" method="POST">
+          <h2>Prediksi Kepribadian</h2>
+
+          <label>Waktu sendirian (jam/hari):</label>
+          <input type="number" name="Time_spent_Alone" min="0" max="11" required>
+
+          <label>Takut tampil di depan orang?</label>
+          <select name="Stage_fear" required>
+            <option value="No" {% if request.form.Stage_fear == 'No' %}selected{% endif %}>Tidak</option>
+            <option value="Yes" {% if request.form.Stage_fear == 'Yes' %}selected{% endif %}>Iya</option>
+          </select>
+
+          <label>Ikut acara sosial (Skala 0–10):</label>
+          <input type="number" name="Social_event_attendance" min="0" max="10" required>
+
+          <label>Keluar rumah (Skala 0–10):</label>
+          <input type="number" name="Going_outside" min="0" max="7" required>
+
+          <label>Capek setelah sosialisasi?</label>
+          <select name="Drained_after_socializing" required>
+            <option value="No" {% if request.form.Drained_after_socializing == 'No' %}selected{% endif %}>Tidak</option>
+            <option value="Yes" {% if request.form.Drained_after_socializing == 'Yes' %}selected{% endif %}>Iya</option>
+          </select>
+
+          <label>Jumlah teman dekat (Skala 0–15):</label>
+          <input type="number" name="Friends_circle_size" min="0" max="15" required>
+
+          <label>Sering posting di medsos (Skala 0–10):</label>
+          <input type="number" name="Post_frequency" min="0" max="10" required>
+
+          <button type="submit">Prediksi</button>
+        </form>
+      </div>
+
+      <!-- Hasil Prediksi -->
+      {% if prediction_text %}
+      <div class="result-box">
+        <h3>{{ prediction_text }}</h3>
+        <ul>
+          <li>Waktu sendirian: {{ request.form.Time_spent_Alone }} jam</li>
+          <li>Takut tampil di depan orang: {{ request.form.Stage_fear }}</li>
+          <li>Ikut acara sosial: {{ request.form.Social_event_attendance }}</li>
+          <li>Keluar rumah: {{ request.form.Going_outside }}</li>
+          <li>Capek setelah sosialisasi: {{ request.form.Drained_after_socializing }}</li>
+          <li>Jumlah teman dekat: {{ request.form.Friends_circle_size }}</li>
+          <li>Sering posting di medsos: {{ request.form.Post_frequency }}</li>
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
